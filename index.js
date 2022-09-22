@@ -5,6 +5,8 @@ const bodyParser = require("body-parser");
 const Auth = require("./auth");
 
 const auth = new Auth(
+  process.env.AWS_ACCESS_KEY_ID,
+  process.env.AWS_SECRET_ACCESS_KEY,
   process.env.POOL_ID,
   process.env.CLIENT_ID,
   process.env.REGION,
@@ -30,7 +32,17 @@ app.get("/", (req, res) => {
 app.post("/auth/signup", async (req, res) => {
   const user = req.body;
 
-  const result = await auth.signUp(user);
+  const result = await auth.signUpUser(user);
+
+  if (result) return res.status(200).end();
+
+  res.status(400).end();
+});
+
+app.post("/auth/signup/admin", async (req, res) => {
+  const user = req.body;
+
+  const result = await auth.signUpAdmin(user);
 
   if (result) return res.status(200).end();
 

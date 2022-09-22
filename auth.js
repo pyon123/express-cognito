@@ -13,17 +13,26 @@ const crypto = require("crypto");
 //   });
 // };
 
+const Groups = {
+  admin: "Admin",
+  user: "User",
+};
+
 class Auth {
+  accessKeyId = "";
+  secretAccessKey = "";
   poolId = "";
   clientId = "";
   clientSecret = "";
   region = "us-east-1";
   expiration = 3600;
-  userPool = null;
+
   cognitoExpress = null;
   cognitoIdentity = null;
 
-  constructor(poolId, clientId, region = "us-east-1", expiration = 3600) {
+  constructor(accessKeyId, secretAccessKey, poolId, clientId, region = "us-east-1", expiration = 3600) {
+    this.accessKeyId = accessKeyId;
+    this.secretAccessKey = secretAccessKey;
     this.poolId = poolId;
     this.clientId = clientId;
     this.region = region;
@@ -32,6 +41,10 @@ class Auth {
     this.cognitoIdentity = new AWS.CognitoIdentityServiceProvider({
       apiVersion: "2016-04-18",
       region: this.region,
+      credentials: {
+        accessKeyId: this.accessKeyId,
+        secretAccessKey: this.secretAccessKey,
+      },
     });
 
     if (poolId && clientId) {
@@ -76,6 +89,44 @@ Auth.prototype.signUp = async function (user) {
 
     return true;
   } catch (error) {
+    return false;
+  }
+};
+
+Auth.prototype.signUpAdmin = async function (user) {
+  try {
+    await this.signUp(user);
+
+    const params = {
+      GroupName: Groups.admin,
+      UserPoolId: this.poolId,
+      Username: user.email.toLowerCase(),
+    };
+
+    await this.cognitoIdentity.adminAddUserToGroup(params).promise();
+
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
+Auth.prototype.signUpUser = async function (user) {
+  try {
+    await this.signUp(user);
+
+    const params = {
+      GroupName: Groups.user,
+      UserPoolId: this.poolId,
+      Username: user.email.toLowerCase(),
+    };
+
+    await this.cognitoIdentity.adminAddUserToGroup(params).promise();
+
+    return true;
+  } catch (error) {
+    console.log(error);
     return false;
   }
 };
