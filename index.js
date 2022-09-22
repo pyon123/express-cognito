@@ -50,7 +50,7 @@ app.post("/auth/login", async (req, res) => {
   const user = req.body;
   const result = await auth.login(user);
 
-  if (result) return res.status(200).end();
+  if (result) return res.status(200).json(result);
 
   res.status(400).end();
 });
