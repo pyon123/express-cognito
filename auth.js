@@ -61,12 +61,13 @@ class Auth {
 
 Auth.prototype.signUp = async function (user) {
   try {
+    const email = user.email.toLowerCase();
     const params = {
       ClientId: this.clientId,
       Password: user.password,
-      Username: user.email.toLowerCase(),
+      Username: email,
       UserAttributes: [
-        { Name: "email", Value: user.email },
+        { Name: "email", Value: email },
         { Name: "phone_number", Value: user.phone },
       ],
     };
@@ -98,8 +99,7 @@ Auth.prototype.confirmSignUp = async function (email, otp) {
 Auth.prototype.login = async function (user) {
   try {
     const payload = {
-      UserPoolId: this.poolId,
-      AuthFlow: "ADMIN_NO_SRP_AUTH",
+      AuthFlow: "USER_PASSWORD_AUTH",
       ClientId: this.clientId,
       AuthParameters: {
         USERNAME: user.email.toLowerCase(),
@@ -107,11 +107,10 @@ Auth.prototype.login = async function (user) {
       },
     };
 
-    const res = await this.cognitoIdentity.adminInitiateAuth(payload).promise();
-    console.log(res);
+    const res = await this.cognitoIdentity.initiateAuth(payload).promise();
+
     return res;
   } catch (error) {
-    console.log(error);
     return null;
   }
 };
