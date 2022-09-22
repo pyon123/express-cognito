@@ -70,6 +70,8 @@ class Auth {
         return res.status(401).send({ name: "AuthError", message: "Only Admin can access" });
       }
 
+      req.userSub = response.sub;
+
       next();
     } catch (error) {
       return res.status(401).send(error);
@@ -85,6 +87,8 @@ class Auth {
         return res.status(401).send({ name: "AuthError", message: "Only users can access" });
       }
 
+      req.userSub = response.sub;
+
       next();
     } catch (error) {
       return res.status(401).send(error);
@@ -99,30 +103,24 @@ class Auth {
   }
 }
 
-Auth.prototype.signUp = async function (user) {
-  try {
-    const email = user.email.toLowerCase();
-    const params = {
-      ClientId: this.clientId,
-      Password: user.password,
-      Username: email,
-      UserAttributes: [
-        { Name: "email", Value: email },
-        { Name: "phone_number", Value: user.phone },
-      ],
-    };
+Auth.prototype._signUp = async function (user) {
+  const email = user.email.toLowerCase();
+  const params = {
+    ClientId: this.clientId,
+    Password: user.password,
+    Username: email,
+    UserAttributes: [
+      { Name: "email", Value: email },
+      { Name: "phone_number", Value: user.phone },
+    ],
+  };
 
-    await this.cognitoIdentity.signUp(params).promise();
-
-    return true;
-  } catch (error) {
-    return false;
-  }
+  return await this.cognitoIdentity.signUp(params).promise();
 };
 
 Auth.prototype.signUpAdmin = async function (user) {
   try {
-    await this.signUp(user);
+    const res = await this._signUp(user);
 
     const params = {
       GroupName: Groups.admin,
@@ -132,16 +130,15 @@ Auth.prototype.signUpAdmin = async function (user) {
 
     await this.cognitoIdentity.adminAddUserToGroup(params).promise();
 
-    return true;
+    return res.UserSub;
   } catch (error) {
-    console.log(error);
     return false;
   }
 };
 
 Auth.prototype.signUpUser = async function (user) {
   try {
-    await this.signUp(user);
+    const res = await this._signUp(user);
 
     const params = {
       GroupName: Groups.user,
@@ -151,9 +148,8 @@ Auth.prototype.signUpUser = async function (user) {
 
     await this.cognitoIdentity.adminAddUserToGroup(params).promise();
 
-    return true;
+    return res.UserSub;
   } catch (error) {
-    console.log(error);
     return false;
   }
 };
