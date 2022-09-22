@@ -2,17 +2,6 @@ const CognitoExpress = require("cognito-express");
 const AWS = require("aws-sdk");
 const crypto = require("crypto");
 
-// const authenticatedRoute = (req, res, next) => {
-//   let accessTokenFromClient = req.headers.accesstoken;
-//   if (!accessTokenFromClient)
-//     return res.status(401).send("Access Token missing from header");
-//   cognitoExpress.validate(accessTokenFromClient, (err, response) => {
-//     if (err) return res.status(401).send(err);
-//     res.locals.user = response;
-//     next();
-//   });
-// };
-
 const Groups = {
   admin: "Admin",
   user: "User",
@@ -52,7 +41,7 @@ class Auth {
         region: this.region,
         cognitoUserPoolId: this.poolId,
         tokenUse: "access",
-        tokenExpiration: this.expiration,
+        tokenExpiration: this.expiration * 1000,
       });
     }
   }
@@ -63,6 +52,29 @@ class Auth {
       ClientId: this.clientId,
     };
   }
+
+  auth = (req) => {
+    let accessTokenFromClient = req.headers["Authorization"] || req.headers["authorization"];
+    if (!accessTokenFromClient) return res.status(401).send("Access Token missing from header");
+
+    accessTokenFromClient = accessTokenFromClient.replace("Bearer ", "");
+    return this.cognitoExpress.validate(accessTokenFromClient);
+  };
+
+  adminOnly = async (req, res, next) => {
+    try {
+      const response = await this.auth(req);
+
+      const groups = response["cognito:groups"];
+      if (!(groups || []).includes(Groups.admin)) {
+        return res.status(401).send({ name: "AuthError", message: "Only Admin can access" });
+      }
+
+      next();
+    } catch (error) {
+      return res.status(401).send(error);
+    }
+  };
 
   generateHash(username) {
     return crypto

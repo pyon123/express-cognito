@@ -67,6 +67,10 @@ app.post("/auth/login", async (req, res) => {
   res.status(400).end();
 });
 
+app.get("/admin", auth.adminOnly, async (req, res) => {
+  res.status(200).send("okay");
+});
+
 app.listen(port, "0.0.0.0", async () => {
   console.log(`server is running on http://localhost:${port}`);
 });
