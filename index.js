@@ -67,8 +67,12 @@ app.post("/auth/login", async (req, res) => {
   res.status(400).end();
 });
 
-app.get("/admin", auth.adminOnly, async (req, res) => {
-  res.status(200).send("okay");
+app.get("/admin-only", auth.adminOnly, async (req, res) => {
+  res.status(200).send("Admin access");
+});
+
+app.get("/user-only", auth.userOnly, async (req, res) => {
+  res.status(200).send("User access");
 });
 
 app.listen(port, "0.0.0.0", async () => {

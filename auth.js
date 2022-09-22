@@ -76,6 +76,21 @@ class Auth {
     }
   };
 
+  userOnly = async (req, res, next) => {
+    try {
+      const response = await this.auth(req);
+
+      const groups = response["cognito:groups"];
+      if (!((groups || []).includes(Groups.admin) || (groups || []).includes(Groups.user))) {
+        return res.status(401).send({ name: "AuthError", message: "Only users can access" });
+      }
+
+      next();
+    } catch (error) {
+      return res.status(401).send(error);
+    }
+  };
+
   generateHash(username) {
     return crypto
       .createHmac("SHA256", this.clientSecret)
