@@ -7,6 +7,7 @@ const Auth = require("./auth");
 const auth = new Auth(
   process.env.POOL_ID,
   process.env.CLIENT_ID,
+  process.env.CLIENT_SECRET,
   process.env.REGION,
   process.env.TOKEN_EXPIRATION
 );
