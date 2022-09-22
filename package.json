@@ -17,10 +17,9 @@
   },
   "homepage": "https://github.com/pyon123/express-cognito#readme",
   "dependencies": {
-    "amazon-cognito-identity-js": "^5.2.10",
     "aws-sdk": "^2.1221.0",
     "cognito-express": "^3.0.1",
-    "node-fetch": "^3.2.10"
+    "crypto": "^1.0.1"
   },
   "devDependencies": {
     "body-parser": "^1.20.0",
