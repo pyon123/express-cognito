@@ -32,30 +32,38 @@ app.get("/", (req, res) => {
 app.post("/auth/signup", async (req, res) => {
   const user = req.body;
 
-  const result = await auth.signUpUser(user);
+  try {
+    const result = await auth.signUpUser(user);
+    // result is UserSub and represending user id in cognito
 
-  if (result) return res.status(200).end();
-
-  res.status(400).end();
+    return res.status(200).end();
+  } catch (error) {
+    return res.status(400).json(error);
+  }
 });
 
 app.post("/auth/signup/admin", async (req, res) => {
   const user = req.body;
 
-  const result = await auth.signUpAdmin(user);
+  try {
+    const result = await auth.signUpAdmin(user);
+    // result is UserSub and represending user id in cognito
 
-  if (result) return res.status(200).end();
-
-  res.status(400).end();
+    return res.status(200).end();
+  } catch (error) {
+    return res.status(400).json(error);
+  }
 });
 
 app.post("/auth/confirmSignUp", async (req, res) => {
-  const user = req.body;
-  const result = await auth.confirmSignUp(user.email, user.otp);
+  try {
+    const user = req.body;
+    const result = await auth.confirmSignUp(user.email, user.otp);
 
-  if (result) return res.status(200).end();
-
-  res.status(400).end();
+    return res.json(result);
+  } catch (error) {
+    return res.status(400).json(error);
+  }
 });
 
 app.post("/auth/login", async (req, res) => {

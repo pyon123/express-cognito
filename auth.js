@@ -119,55 +119,41 @@ Auth.prototype._signUp = async function (user) {
 };
 
 Auth.prototype.signUpAdmin = async function (user) {
-  try {
-    const res = await this._signUp(user);
+  const res = await this._signUp(user);
 
-    const params = {
-      GroupName: Groups.admin,
-      UserPoolId: this.poolId,
-      Username: user.email.toLowerCase(),
-    };
+  const params = {
+    GroupName: Groups.admin,
+    UserPoolId: this.poolId,
+    Username: user.email.toLowerCase(),
+  };
 
-    await this.cognitoIdentity.adminAddUserToGroup(params).promise();
+  await this.cognitoIdentity.adminAddUserToGroup(params).promise();
 
-    return res.UserSub;
-  } catch (error) {
-    return false;
-  }
+  return res.UserSub;
 };
 
 Auth.prototype.signUpUser = async function (user) {
-  try {
-    const res = await this._signUp(user);
+  const res = await this._signUp(user);
 
-    const params = {
-      GroupName: Groups.user,
-      UserPoolId: this.poolId,
-      Username: user.email.toLowerCase(),
-    };
+  const params = {
+    GroupName: Groups.user,
+    UserPoolId: this.poolId,
+    Username: user.email.toLowerCase(),
+  };
 
-    await this.cognitoIdentity.adminAddUserToGroup(params).promise();
+  await this.cognitoIdentity.adminAddUserToGroup(params).promise();
 
-    return res.UserSub;
-  } catch (error) {
-    return false;
-  }
+  return res.UserSub;
 };
 
 Auth.prototype.confirmSignUp = async function (email, otp) {
-  try {
-    const params = {
-      ClientId: this.clientId,
-      ConfirmationCode: otp,
-      Username: email.toLowerCase(),
-    };
+  const params = {
+    ClientId: this.clientId,
+    ConfirmationCode: otp,
+    Username: email.toLowerCase(),
+  };
 
-    await this.cognitoIdentity.confirmSignUp(params).promise();
-
-    return true;
-  } catch (error) {
-    return false;
-  }
+  return await this.cognitoIdentity.confirmSignUp(params).promise();
 };
 
 Auth.prototype.login = async function (user) {
@@ -239,5 +225,5 @@ Auth.prototype.refreshToken = async function (refreshToken) {
   };
 
   return await this.cognitoIdentity.initiateAuth(payload).promise();
-}
+};
 module.exports = Auth;
