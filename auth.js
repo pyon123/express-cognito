@@ -229,4 +229,15 @@ Auth.prototype.confirmForgotPassword = async function (email, confirmCode, passw
   return await this.cognitoIdentity.confirmForgotPassword(params).promise();
 };
 
+Auth.prototype.refreshToken = async function (refreshToken) {
+  const payload = {
+    AuthFlow: "REFRESH_TOKEN_AUTH",
+    ClientId: this.clientId,
+    AuthParameters: {
+      REFRESH_TOKEN: refreshToken,
+    },
+  };
+
+  return await this.cognitoIdentity.initiateAuth(payload).promise();
+}
 module.exports = Auth;

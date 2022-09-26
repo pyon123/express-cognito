@@ -116,6 +116,16 @@ app.post("/auth/confirm-forgot-password", async (req, res) => {
   }
 });
 
+app.post("/auth/refresh-token", async (req, res) => {
+  try {
+    const { refreshToken } = req.body;
+    const result = await auth.refreshToken(refreshToken);
+    return res.json(result);
+  } catch (error) {
+    return res.status(400).json(error);
+  }
+});
+
 app.get("/admin-only", auth.adminOnly, async (req, res) => {
   res.status(200).send("Admin access");
 });
