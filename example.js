@@ -34,9 +34,8 @@ app.post("/auth/signup", async (req, res) => {
 
   try {
     const result = await auth.signUpUser(user);
-    // result is UserSub and represending user id in cognito
 
-    return res.status(200).end();
+    return res.status(200).json(result);
   } catch (error) {
     return res.status(400).json(error);
   }
@@ -47,9 +46,8 @@ app.post("/auth/signup/admin", async (req, res) => {
 
   try {
     const result = await auth.signUpAdmin(user);
-    // result is UserSub and represending user id in cognito
 
-    return res.status(200).end();
+    return res.status(200).json(result);
   } catch (error) {
     return res.status(400).json(error);
   }
@@ -57,8 +55,8 @@ app.post("/auth/signup/admin", async (req, res) => {
 
 app.post("/auth/confirmSignUp", async (req, res) => {
   try {
-    const user = req.body;
-    const result = await auth.confirmSignUp(user.email, user.otp);
+    const { username, otp } = req.body;
+    const result = await auth.confirmSignUp(username, otp);
 
     return res.json(result);
   } catch (error) {
@@ -69,8 +67,15 @@ app.post("/auth/confirmSignUp", async (req, res) => {
 app.post("/auth/login", async (req, res) => {
   const user = req.body;
   try {
-    const result = await auth.login(user);
-    return res.status(200).json(result);
+    const authResult = await auth.login(user);
+    if (!authResult.ChallengeName) {
+      const userInfo = await auth.getUserInfo(authResult.AuthenticationResult.AccessToken);
+      authResult.username = userInfo.username;
+      authResult.groups = userInfo.groups;
+    }
+
+    return res.status(200).json(authResult);
+  
   } catch (error) {
     return res.status(400).json(error);
   }
@@ -107,7 +112,7 @@ app.post("/auth/toggle-mfa", async (req, res) => {
 
 app.post("/auth/forgot-password", async (req, res) => {
   try {
-    const result = await auth.forgotPassword(req.body.email);
+    const result = await auth.forgotPassword(req.body.username);
     return res.json(result);
   } catch (error) {
     return res.status(400).json(error);
@@ -116,8 +121,8 @@ app.post("/auth/forgot-password", async (req, res) => {
 
 app.post("/auth/confirm-forgot-password", async (req, res) => {
   try {
-    const { email, code, password } = req.body;
-    const result = await auth.confirmForgotPassword(email, code, password);
+    const { username, code, password } = req.body;
+    const result = await auth.confirmForgotPassword(username, code, password);
     return res.json(result);
   } catch (error) {
     return res.status(400).json(error);
@@ -134,11 +139,11 @@ app.post("/auth/refresh-token", async (req, res) => {
   }
 });
 
-app.get("/admin-only", auth.adminOnly, async (req, res) => {
+app.get("/users/all", auth.adminOnly, async (req, res) => {
   res.status(200).send("Admin access");
 });
 
-app.get("/user-only", auth.userOnly, async (req, res) => {
+app.get("/users/user-only", auth.userOnly, async (req, res) => {
   res.status(200).send("User access");
 });
 

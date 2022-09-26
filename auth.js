@@ -53,6 +53,15 @@ class Auth {
     };
   }
 
+  getUserInfo = async (accessToken) => {
+    const info = await this.cognitoExpress.validate(accessToken);
+    return {
+      username: info.username,
+      sub: info.sub,
+      groups: info["cognito:groups"],
+    };
+  };
+
   auth = (req) => {
     let accessTokenFromClient = req.headers["Authorization"] || req.headers["authorization"];
     if (!accessTokenFromClient) return res.status(401).send("Access Token missing from header");
@@ -70,7 +79,11 @@ class Auth {
         return res.status(401).send({ name: "AuthError", message: "Only Admin can access" });
       }
 
-      req.userSub = response.sub;
+      req.user = {
+        username: response.username,
+        sub: response.sub,
+        groups,
+      };
 
       next();
     } catch (error) {
@@ -87,7 +100,11 @@ class Auth {
         return res.status(401).send({ name: "AuthError", message: "Only users can access" });
       }
 
-      req.userSub = response.sub;
+      req.user = {
+        username: response.username,
+        sub: response.sub,
+        groups,
+      };
 
       next();
     } catch (error) {
@@ -104,13 +121,12 @@ class Auth {
 }
 
 Auth.prototype._signUp = async function (user) {
-  const email = user.email.toLowerCase();
   const params = {
     ClientId: this.clientId,
     Password: user.password,
-    Username: email,
+    Username: user.username,
     UserAttributes: [
-      { Name: "email", Value: email },
+      { Name: "email", Value: user.email },
       { Name: "phone_number", Value: user.phone },
     ],
   };
@@ -124,12 +140,12 @@ Auth.prototype.signUpAdmin = async function (user) {
   const params = {
     GroupName: Groups.admin,
     UserPoolId: this.poolId,
-    Username: user.email.toLowerCase(),
+    Username: user.username,
   };
 
   await this.cognitoIdentity.adminAddUserToGroup(params).promise();
 
-  return res.UserSub;
+  return res;
 };
 
 Auth.prototype.signUpUser = async function (user) {
@@ -138,19 +154,19 @@ Auth.prototype.signUpUser = async function (user) {
   const params = {
     GroupName: Groups.user,
     UserPoolId: this.poolId,
-    Username: user.email.toLowerCase(),
+    Username: user.username,
   };
 
   await this.cognitoIdentity.adminAddUserToGroup(params).promise();
 
-  return res.UserSub;
+  return res;
 };
 
-Auth.prototype.confirmSignUp = async function (email, otp) {
+Auth.prototype.confirmSignUp = async function (username, otp) {
   const params = {
     ClientId: this.clientId,
     ConfirmationCode: otp,
-    Username: email.toLowerCase(),
+    Username: username,
   };
 
   return await this.cognitoIdentity.confirmSignUp(params).promise();
@@ -161,7 +177,7 @@ Auth.prototype.login = async function (user) {
     AuthFlow: "USER_PASSWORD_AUTH",
     ClientId: this.clientId,
     AuthParameters: {
-      USERNAME: user.email.toLowerCase(),
+      USERNAME: user.username,
       PASSWORD: user.password,
     },
   };
@@ -196,21 +212,21 @@ Auth.prototype.toggleMFA = async function (accessToken, on) {
   return await this.cognitoIdentity.setUserMFAPreference(params).promise();
 };
 
-Auth.prototype.forgotPassword = async function (email) {
+Auth.prototype.forgotPassword = async function (username) {
   const params = {
     ClientId: this.clientId,
-    Username: email.toLowerCase(),
+    Username: username,
   };
 
   return await this.cognitoIdentity.forgotPassword(params).promise();
 };
 
-Auth.prototype.confirmForgotPassword = async function (email, confirmCode, password) {
+Auth.prototype.confirmForgotPassword = async function (username, confirmCode, password) {
   const params = {
     ClientId: this.clientId,
     ConfirmationCode: confirmCode,
     Password: password,
-    Username: email.toLowerCase(),
+    Username: username,
   };
   return await this.cognitoIdentity.confirmForgotPassword(params).promise();
 };
