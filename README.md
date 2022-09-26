@@ -35,4 +35,9 @@ You can add app client later if you forget to add it in this step.
 
 ---
 
+## IAM
+To create user group or add a user into a specific user group, you need `AmazonCognitoPowerUser` IAM role and set `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`  when you ceate auth instance. (see 12.png)
+
+---
+
 ## API usage
