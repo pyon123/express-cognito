@@ -171,22 +171,43 @@ Auth.prototype.confirmSignUp = async function (email, otp) {
 };
 
 Auth.prototype.login = async function (user) {
-  try {
-    const payload = {
-      AuthFlow: "USER_PASSWORD_AUTH",
-      ClientId: this.clientId,
-      AuthParameters: {
-        USERNAME: user.email.toLowerCase(),
-        PASSWORD: user.password,
-      },
-    };
+  const payload = {
+    AuthFlow: "USER_PASSWORD_AUTH",
+    ClientId: this.clientId,
+    AuthParameters: {
+      USERNAME: user.email.toLowerCase(),
+      PASSWORD: user.password,
+    },
+  };
 
-    const res = await this.cognitoIdentity.initiateAuth(payload).promise();
+  return await this.cognitoIdentity.initiateAuth(payload).promise();
+};
 
-    return res;
-  } catch (error) {
-    return null;
-  }
+Auth.prototype.logout = async function (token) {
+  const params = {
+    AccessToken: token,
+  };
+
+  return await this.cognitoIdentity.globalSignOut(params).promise();
+};
+
+Auth.prototype.toggleMFA = async function (accessToken, on) {
+  /**
+   * on = true/false
+   */
+  const params = {
+    AccessToken: accessToken,
+    SMSMfaSettings: {
+      Enabled: on,
+      PreferredMfa: on,
+    },
+    SoftwareTokenMfaSettings: {
+      Enabled: false,
+      PreferredMfa: false,
+    },
+  };
+
+  return await this.cognitoIdentity.setUserMFAPreference(params).promise();
 };
 
 module.exports = Auth;

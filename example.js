@@ -67,6 +67,38 @@ app.post("/auth/login", async (req, res) => {
   res.status(400).end();
 });
 
+app.post("/auth/logout", async (req, res) => {
+  let accessTokenFromClient = req.headers["Authorization"] || req.headers["authorization"];
+  if (!accessTokenFromClient) return res.status(401).send("Access Token missing from header");
+
+  accessTokenFromClient = accessTokenFromClient.replace("Bearer ", "");
+  console.log(accessTokenFromClient);
+  try {
+    const result = await auth.logout(accessTokenFromClient);
+    console.log(result);
+    return res.json(result);
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json(error);
+  }
+});
+
+app.post("/auth/toggle-mfa", async (req, res) => {
+  let accessTokenFromClient = req.headers["Authorization"] || req.headers["authorization"];
+  if (!accessTokenFromClient) return res.status(401).send("Access Token missing from header");
+
+  accessTokenFromClient = accessTokenFromClient.replace("Bearer ", "");
+
+  try {
+    const result = await auth.toggleMFA(accessTokenFromClient, true);
+    console.log(result);
+    return res.json(result);
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json(error);
+  }
+});
+
 app.get("/admin-only", auth.adminOnly, async (req, res) => {
   res.status(200).send("Admin access");
 });
