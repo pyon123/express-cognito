@@ -210,4 +210,23 @@ Auth.prototype.toggleMFA = async function (accessToken, on) {
   return await this.cognitoIdentity.setUserMFAPreference(params).promise();
 };
 
+Auth.prototype.forgotPassword = async function (email) {
+  const params = {
+    ClientId: this.clientId,
+    Username: email.toLowerCase(),
+  };
+
+  return await this.cognitoIdentity.forgotPassword(params).promise();
+};
+
+Auth.prototype.confirmForgotPassword = async function (email, confirmCode, password) {
+  const params = {
+    ClientId: this.clientId,
+    ConfirmationCode: confirmCode,
+    Password: password,
+    Username: email.toLowerCase(),
+  };
+  return await this.cognitoIdentity.confirmForgotPassword(params).promise();
+};
+
 module.exports = Auth;

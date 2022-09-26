@@ -60,11 +60,12 @@ app.post("/auth/confirmSignUp", async (req, res) => {
 
 app.post("/auth/login", async (req, res) => {
   const user = req.body;
-  const result = await auth.login(user);
-
-  if (result) return res.status(200).json(result);
-
-  res.status(400).end();
+  try {
+    const result = await auth.login(user);
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(400).json(error);
+  }
 });
 
 app.post("/auth/logout", async (req, res) => {
@@ -72,13 +73,11 @@ app.post("/auth/logout", async (req, res) => {
   if (!accessTokenFromClient) return res.status(401).send("Access Token missing from header");
 
   accessTokenFromClient = accessTokenFromClient.replace("Bearer ", "");
-  console.log(accessTokenFromClient);
+
   try {
     const result = await auth.logout(accessTokenFromClient);
-    console.log(result);
     return res.json(result);
   } catch (error) {
-    console.log(error);
     return res.status(400).json(error);
   }
 });
@@ -94,7 +93,25 @@ app.post("/auth/toggle-mfa", async (req, res) => {
     console.log(result);
     return res.json(result);
   } catch (error) {
-    console.log(error);
+    return res.status(400).json(error);
+  }
+});
+
+app.post("/auth/forgot-password", async (req, res) => {
+  try {
+    const result = await auth.forgotPassword(req.body.email);
+    return res.json(result);
+  } catch (error) {
+    return res.status(400).json(error);
+  }
+});
+
+app.post("/auth/confirm-forgot-password", async (req, res) => {
+  try {
+    const { email, code, password } = req.body;
+    const result = await auth.confirmForgotPassword(email, code, password);
+    return res.json(result);
+  } catch (error) {
     return res.status(400).json(error);
   }
 });
