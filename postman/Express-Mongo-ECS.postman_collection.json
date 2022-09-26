@@ -1,0 +1,924 @@
+{
+	"info": {
+		"_postman_id": "1d1b99df-4b77-4024-b5fd-05f7c305a717",
+		"name": "Express-Mongo-ECS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9010598"
+	},
+	"item": [
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"user 3\",\n    \"email\": \"user_3@email.com\",\n    \"password\": \"password!23\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/users",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "find",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/users",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"user 4\",\n    \"email\": \"user_4@email.com\",\n    \"password\": \"password!23\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/users/631a0a3c9136e3233708d98f",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"631a0a3c9136e3233708d98f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/users/631a0c0aaf045ef8eca68094",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"631a0c0aaf045ef8eca68094"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "signup",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"petigoj648@dnitem.com\",\n    \"password\": \"Password!23\",\n    \"phone\": \"\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/signup",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "confirm registeration",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"meces49761\",\n    \"otp\": \"409938\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/confirmSignUp",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"confirmSignUp"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"username\": \"meces49761\",\n    \"otp\": \"409938\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/auth/confirmSignUp",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"auth",
+										"confirmSignUp"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "2"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"2-vyGp6PvFo4RvsFtPoIWeCReyIC8\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 26 Sep 2022 20:25:47 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{}"
+						}
+					]
+				},
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var responseData = JSON.parse(responseBody);",
+									"",
+									"// console.log(responseData.data.token);",
+									"// postman.setEnvironmentVariable(\"access_token\", responseData.access_token);",
+									"if (!responseData.ChallengeName) {",
+									"    pm.collectionVariables.set(\"token\", responseData.AuthenticationResult.AccessToken)",
+									"    pm.collectionVariables.set(\"refreshToken\", responseData.AuthenticationResult.RefreshToken)",
+									"} else {",
+									"    pm.collectionVariables.set(\"user_srp\", responseData.ChallengeParameters.USER_ID_FOR_SRP)",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"meces49761\",\n    \"password\": \"Password!23\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/login",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"username\": \"meces49761\",\n    \"password\": \"Password!23\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/auth/login",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "4164"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1044-0+OTWb+mp7bJFh1QyBvkD3ZlKHc\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 26 Sep 2022 20:52:23 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"ChallengeParameters\": {},\n    \"AuthenticationResult\": {\n        \"AccessToken\": \"eyJraWQiOiJkdkdSKzVrbEdaVWptK0tPZXJnK3VkRVNWcll5cUtvVWQ0XC9EeGZuWEc3OD0iLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiI2YzAwM2UxNS03ZGY2LTQyNGUtOTE0Yi03YTI3ZTZhMjM2YjAiLCJjb2duaXRvOmdyb3VwcyI6WyJBZG1pbiJdLCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAudXMtZWFzdC0xLmFtYXpvbmF3cy5jb21cL3VzLWVhc3QtMV9neHdDaG12dHUiLCJjbGllbnRfaWQiOiI1cXVldWN0M3ZzYTd2ZjB2Z3RtaTdvaTNmZSIsIm9yaWdpbl9qdGkiOiI2ODc5ZjA0MC1jNDVlLTQ4NDItYTk5OC0xNzVlZThjYzBlYjgiLCJldmVudF9pZCI6ImI1ZDdkZWRmLWI0OWUtNDlmMS04Y2E3LWYzYmI0Nzg1YzU2NyIsInRva2VuX3VzZSI6ImFjY2VzcyIsInNjb3BlIjoiYXdzLmNvZ25pdG8uc2lnbmluLnVzZXIuYWRtaW4iLCJhdXRoX3RpbWUiOjE2NjQyMjU1NDMsImV4cCI6MTY2NDIyOTE0MywiaWF0IjoxNjY0MjI1NTQzLCJqdGkiOiIyNTY3NDgwOS1kNGU5LTRhNzQtOTYzMS0zOTg5MWNkZjVjZmYiLCJ1c2VybmFtZSI6Im1lY2VzNDk3NjEifQ.HzRPg-VXzFCd0XgwvvT_JHqCcEijJqv0fMkSGLiw3Qfoi1YNw758EbpxpWQTEEKik0sEqjZlMaKsu1yykr2Jhg5b3a1GKJjzu0koRVPs_1_Dj_77QmritgoqQXdnf9psCyh0AIVYvTt5ytsypzrufDEN0WXYKS9CPfhEfKsMe9VM-1unER-qVHC8oI83JSAjhrPFHjJKHPWwVivfP2mq4xFrcSw2FXRchjO5c4fhOlzylKbSSbSribzssG5tEgIlIJy3fqjDPBlfGKw1RJQXAZZHWBmpSDjugU6dhWOrT4EgWUBPUNMaLDumdKYyLyIHydg1a5AZMpqCa9ieKq9byg\",\n        \"ExpiresIn\": 3600,\n        \"TokenType\": \"Bearer\",\n        \"RefreshToken\": \"eyJjdHkiOiJKV1QiLCJlbmMiOiJBMjU2R0NNIiwiYWxnIjoiUlNBLU9BRVAifQ.m3nselKZC5Hl6wsuu4VHJBFB1cTrNRajRIgcU-zr2CCf3xNJWp2cDB3pLvXkjfA5NF2PVP1MkFtasTFAwaw88pjfKggXSjlVfeHzl6cZL4D3xSwFNqCMgmm--f91lxwCgzkaQWnjQGif2UcoV2FZ64C7zS0eWkidSaK7q6QF78E_ky2yUTPu9BNyL9VLDtibfp7xLb_-DOsNtbWYJJ0EW-22GhTqOP0z3B1OF7r2Co0IDot10fJ-QrhKNE77UA0aoJ8MODsdpxVqGRxgnMri8uwlecz8RnlciR3y9Ta5UHNXcZLU5tJcXzJj7j7FKqSlfBFS37R13UF_OFXKxYfo0w.pbb7pmLcbl-RqYID.IIoTVZ8V6K6PVUHkeFJdmEc4nccLZgNkdi5R7xZ_nNR4-5t4xOEHtxMnzIXLrhRp_pziatcQyzurwYt0TB0CkZ0GlzOp6pYUv2bNRw7wxblDEb2tgKX56APO0g9ypdeKyTFjUQq0ntle_PdSPm9jjr3GMZDp_1avi6qup0HA4yiwS70qVKNbWhpyLxHF2JOoWM8Z5-nGU_7CwKUOFmSQxnDnOvIqnfT7AawJRkeauqZNMLOimWQNGUJAYMNk6h0pQRBVu8IGeiQ0d66fcM_Wph1GVqBwwLfd3062ZKuT8MRkLjJfe2OH0yTmQPZCQZu6zzcDtf2plALgZ65ggX3_IcHRZCNz5lZ9DaklkMw4P0R8K1L498hqgnm6_F9FdAYTmLvCjruO-ZVqXFPO6us93pJliXvcEb-GY56CHD6OIN4suuoL6abUKLUGtKUO2BVq9lmSFT4BL1f9C3ob5sQNYbq_03QQdO7yG8cpeTi581uik1GL50MR7B9pOBXAYjU9h_rRdh-ENkx60t9m35YZ1gxm-xCnNwRfGPOMlxT4jXZv91Tqk7FhzsBirQV_N_4yOXlEcumvmzJMB32TXz8tYo3wDurCzyXcd9NmPunxrhWdlDvSz5wQQZlc7FmtY2871tU_Wwu6vNWKD_TiXC_GwFc7VBVkjfuqh7H-CN4f5hwee3EDpbvpZcMd3h40c8v4RbCQg8_DdCFS5_LCqqldMfZ2YSVVT1uT6jV9tH-Rab2NZ0-AUY1Dutp7Hfga6DEkUd35aD4yOvCss5d36kRB-KxrQhoBpD-6eqGMqYC31BeQ2l_phUrmrMHaW9walXi-N-qT8cr9yBmNOoCJisJL20geK38CY0xRKhvfzWaV3VMTpG0ajzuhKMTXY8cUonMJsevSq3wi3cHo9IGpQS8kSvFnqeWPihnTa33hXYRYpPeuhiyYTit8X3nwePuUPSPIXUqDES9WWzIZaL_7Pcqa6-XNNwn_2Y6IJwHh_iCgxRUk8hlsobKQxl3g4q2h72BRYFTbXoHKg2-m_70xCHWrjTNTTs52zDgjAG6q3nVPNcX2JvHcREjZhy62T4pUX_tZ2bnWrls4qlBA8LSY_BjM_X6bYeT8k0FWhbPQIcwlCkbR9RqP8BAh16csOphkFYIuxoMBfIQfuMj2U7Gx4_TzxjSpq7NpbUsPv0EkY5yvI_-hC02RdaWweh0kj2FjEZg2-90ZzNISpyhVb8DyCcdPztXyNVW7TaUe42ennII8SGZujP3MdNbCSM5H-P22EgXrN87C_VMZbGQ8Bw.SJ9BBgxir1reNZOeNcOpQQ\",\n        \"IdToken\": \"eyJraWQiOiJJWWkxVjQ0XC9KNm9MaU1LZWhDQlFrUXVnK3NPdnBBOXcxSldadFRXaXVvQT0iLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiI2YzAwM2UxNS03ZGY2LTQyNGUtOTE0Yi03YTI3ZTZhMjM2YjAiLCJjb2duaXRvOmdyb3VwcyI6WyJBZG1pbiJdLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiaXNzIjoiaHR0cHM6XC9cL2NvZ25pdG8taWRwLnVzLWVhc3QtMS5hbWF6b25hd3MuY29tXC91cy1lYXN0LTFfZ3h3Q2htdnR1IiwicGhvbmVfbnVtYmVyX3ZlcmlmaWVkIjpmYWxzZSwiY29nbml0bzp1c2VybmFtZSI6Im1lY2VzNDk3NjEiLCJvcmlnaW5fanRpIjoiNjg3OWYwNDAtYzQ1ZS00ODQyLWE5OTgtMTc1ZWU4Y2MwZWI4IiwiYXVkIjoiNXF1ZXVjdDN2c2E3dmYwdmd0bWk3b2kzZmUiLCJldmVudF9pZCI6ImI1ZDdkZWRmLWI0OWUtNDlmMS04Y2E3LWYzYmI0Nzg1YzU2NyIsInRva2VuX3VzZSI6ImlkIiwiYXV0aF90aW1lIjoxNjY0MjI1NTQzLCJwaG9uZV9udW1iZXIiOiIrMTQxNDIxNjMwMjEiLCJleHAiOjE2NjQyMjkxNDMsImlhdCI6MTY2NDIyNTU0MywianRpIjoiNmQ1Mjk4OGUtNWRmMy00OTQ1LTk4ZWYtMzBjNTEzMDQ3ZGZkIiwiZW1haWwiOiJtZWNlczQ5NzYxQGRuaXRlbS5jb20ifQ.sh_2PWR-flYnooJ4BwFIBI5VDHqXTYXW2Ee05Rs_f9oFK-CO8Ckmt53_KL9o-e1nNL3_bbN2-DUpi7Rj3G9AkVSNzkQ05kwwjozkumrK-Wi5irX1KfmoExrhY_M_nbgh80QRI1v-MC7FsCsGkiGP5eMdRpoO8fmUcenPdp24zUC3cG-0Yvr1T8qVe-uvVlqejVVsKEM3DSDKk_1K1tJT6RYBmpS1ofvrvZRU_ttwP4o_NaLGTFwRlxN_CH0QDRVgUPeBObW_R4IqaGN4vfWDOGD7lpXCyK0udYBQlwJ84EZovz0uUM5Jve5FnVpCrqFFGHmIaLdR8hVPjVla2P_AaQ\"\n    },\n    \"username\": \"meces49761\",\n    \"groups\": [\n        \"Admin\"\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "signup admin",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"meces49761\",\n    \"email\": \"meces49761@dnitem.com\",\n    \"password\": \"Password!23\",\n    \"phone\": \"+14142163021\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/signup/admin",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"signup",
+								"admin"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"username\": \"meces49761\",\n    \"email\": \"meces49761@dnitem.com\",\n    \"password\": \"Password!23\",\n    \"phone\": \"+14142163021\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/auth/signup/admin",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"auth",
+										"signup",
+										"admin"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "171"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"ab-kNYB3gk2LCLTmLafh6F4iIrLjX0\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 26 Sep 2022 20:22:47 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"UserConfirmed\": false,\n    \"CodeDeliveryDetails\": {\n        \"Destination\": \"m***@d***\",\n        \"DeliveryMedium\": \"EMAIL\",\n        \"AttributeName\": \"email\"\n    },\n    \"UserSub\": \"6c003e15-7df6-424e-914b-7a27e6a236b0\"\n}"
+						}
+					]
+				},
+				{
+					"name": "logout",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/auth/logout",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"logout"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{url}}/auth/logout",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"auth",
+										"logout"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "2"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"2-vyGp6PvFo4RvsFtPoIWeCReyIC8\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 26 Sep 2022 20:30:37 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{}"
+						}
+					]
+				},
+				{
+					"name": "forgot password",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"meces49761\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/forgot-password",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"forgot-password"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"username\": \"meces49761\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/auth/forgot-password",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"auth",
+										"forgot-password"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "100"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"64-1GkQeePFZ+UH/7/VMLV2u7gwLAw\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 26 Sep 2022 20:31:56 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"CodeDeliveryDetails\": {\n        \"Destination\": \"m***@d***\",\n        \"DeliveryMedium\": \"EMAIL\",\n        \"AttributeName\": \"email\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "confirm forgot password",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"meces49761\",\n    \"password\": \"Password!23\",\n    \"code\": \"672244\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/confirm-forgot-password",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"confirm-forgot-password"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"username\": \"meces49761\",\n    \"password\": \"Password!23\",\n    \"code\": \"672244\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/auth/confirm-forgot-password",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"auth",
+										"confirm-forgot-password"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "2"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"2-vyGp6PvFo4RvsFtPoIWeCReyIC8\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 26 Sep 2022 20:34:14 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{}"
+						}
+					]
+				},
+				{
+					"name": "refresh token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var responseData = JSON.parse(responseBody);",
+									"pm.collectionVariables.set(\"token\", responseData.AuthenticationResult.AccessToken);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"refreshToken\": \"{{refreshToken}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/refresh-token",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"refresh-token"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "refresh token",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"refreshToken\": \"{{refreshToken}}\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/auth/refresh-token",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"auth",
+										"refresh-token"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "2431"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"97f-wMsBGLgE82ZkuGXazgSbU6cWLd0\""
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 26 Sep 2022 17:41:33 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"ChallengeParameters\": {},\n    \"AuthenticationResult\": {\n        \"AccessToken\": \"eyJraWQiOiJmbjdGNVwvXC9lcjNqMUJvZ2lzOCt2a3U0THdMQkVMaXRiYXNSUGFpZldRSzg9IiwiYWxnIjoiUlMyNTYifQ.eyJzdWIiOiIyMWNlN2I1Ni1mYjUwLTQwMjUtODUxMC00ZDY0NjA2YTZjOTIiLCJjb2duaXRvOmdyb3VwcyI6WyJBZG1pbiJdLCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAudXMtZWFzdC0xLmFtYXpvbmF3cy5jb21cL3VzLWVhc3QtMV9JUmFyWDhXY3kiLCJjbGllbnRfaWQiOiJsdWJqM205bjB0ajdtN2tpcTViZjF1dTZzIiwib3JpZ2luX2p0aSI6ImZhMWU5ODA2LTEwOGEtNDQwZi04NTVhLTg5ZTk0YTBhMzc0ZSIsImV2ZW50X2lkIjoiODI2ZTM2ZTctZmJkYi00MDkwLWI2NWYtMjI0ZjQ3NWU1NThjIiwidG9rZW5fdXNlIjoiYWNjZXNzIiwic2NvcGUiOiJhd3MuY29nbml0by5zaWduaW4udXNlci5hZG1pbiIsImF1dGhfdGltZSI6MTY2NDIxNDA2NiwiZXhwIjoxNjY0MjE3NjkyLCJpYXQiOjE2NjQyMTQwOTIsImp0aSI6IjcyNzU4ZDNiLWQ1ZjktNDllYi04MGE3LTVhODhmMWJiMDEwOSIsInVzZXJuYW1lIjoiMjFjZTdiNTYtZmI1MC00MDI1LTg1MTAtNGQ2NDYwNmE2YzkyIn0.Zp4uOD2l1gRspWzTjmHlSlTsIL4zLrbUhhzzPAwysLVQLXJSViSbD4_OmWtbNfiKXbG8g35Hjh4I0wiCeis1jL8saCQekVj8eeBEJErsKKVj_qm5PTlk6IH7hFttReSsaiAO8bzL9VCaAg82LRHgD0RTPcC7IoikRnUbQR7iHYhABzRnbbCWhdV9VwxNy2EjwFtxABpVWQI7v5IfTJ_2CR3fnNDul1IGvrGVJeSvfbwqHD0O4llymMqOdOe76lWNo340ZBCS1YuvwAbKpFXm9BzSx6viCpk4ZGnpOZpeoeJ2k9E6o2vcuuRBqjzd1snU1nkzg7lLnrmZGLX0ED10mw\",\n        \"ExpiresIn\": 3600,\n        \"TokenType\": \"Bearer\",\n        \"IdToken\": \"eyJraWQiOiI2TWlzYVp6YlwvTCtiRVliemlaUGN5OXJYNjM1UG9LbVZyRDRpaDdEMlJqdz0iLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiIyMWNlN2I1Ni1mYjUwLTQwMjUtODUxMC00ZDY0NjA2YTZjOTIiLCJjb2duaXRvOmdyb3VwcyI6WyJBZG1pbiJdLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiaXNzIjoiaHR0cHM6XC9cL2NvZ25pdG8taWRwLnVzLWVhc3QtMS5hbWF6b25hd3MuY29tXC91cy1lYXN0LTFfSVJhclg4V2N5IiwicGhvbmVfbnVtYmVyX3ZlcmlmaWVkIjpmYWxzZSwiY29nbml0bzp1c2VybmFtZSI6IjIxY2U3YjU2LWZiNTAtNDAyNS04NTEwLTRkNjQ2MDZhNmM5MiIsIm9yaWdpbl9qdGkiOiJmYTFlOTgwNi0xMDhhLTQ0MGYtODU1YS04OWU5NGEwYTM3NGUiLCJhdWQiOiJsdWJqM205bjB0ajdtN2tpcTViZjF1dTZzIiwiZXZlbnRfaWQiOiI4MjZlMzZlNy1mYmRiLTQwOTAtYjY1Zi0yMjRmNDc1ZTU1OGMiLCJ0b2tlbl91c2UiOiJpZCIsImF1dGhfdGltZSI6MTY2NDIxNDA2NiwicGhvbmVfbnVtYmVyIjoiKzE0MTQyMTYzMDIxIiwiZXhwIjoxNjY0MjE3NjkyLCJpYXQiOjE2NjQyMTQwOTIsImp0aSI6ImE1OThiZGVkLTAxYzItNDk3OC05Y2M5LWJlMTg3MTIzMWJkNCIsImVtYWlsIjoibWVjZXM0OTc2MUBkbml0ZW0uY29tIn0.L9zpuqN-IbqkqgPfX8LZurEO-cGqmDgiG5AdK8EuaqoQaqHheOO8VbRbkojIy29-48NgZbvUXFkMldmoIJmFhIkNhRMqwcesfsCwuKoYzLvLnzGWOmaWwMT3C7-HyJOVy7DRN7q5ceadUyPArLghzc5A22hcXyga_QlKA_aA8ufH0-bfHYFFa4xUsuPq_gT_phfNZTlS8BwH6XE-UsKH3Al0oBdUK2HVAH1YmQTY48LD34yzFA--4SoxKu_f0PYEzi5fE9tc3meK7phvXQzYpL2OMAxmoQzEdl4FVgfG8EcrIZ04J77g7XNwKSAUXyG2jnU11WsX7Urk4-Za2IXP-Q\"\n    }\n}"
+						}
+					]
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "admin only",
+			"item": [
+				{
+					"name": "get test",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/users/all",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"all"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user only",
+			"item": [
+				{
+					"name": "get test",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/users/user-only",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"user-only"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "health check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/users/check",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"users",
+						"check"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "http://localhost:3000",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": ""
+		},
+		{
+			"key": "refreshToken",
+			"value": ""
+		},
+		{
+			"key": "url",
+			"value": "http://dev-test-437526538.us-east-1.elb.amazonaws.com",
+			"type": "string",
+			"disabled": true
+		}
+	]
+}

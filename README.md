@@ -43,6 +43,9 @@ To create user group or add a user into a specific user group, you need `AmazonC
 ---
 
 ## API usage
+
+### Check api postman examples in the `postman` directory. 
+
 1. Init Auth
 ```
 require("dotenv").config();
