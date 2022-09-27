@@ -163,7 +163,15 @@ app.get("/user-only", auth.userOnly, async (req, res) => {
 ```
 middleware will return user in request.
 
-12. getUserInfo
+12. userOptional auth middleware
+Not preventing endpoint, gut it checks user logged in based on Authorization header and if exists, it adds user data in req.user, if not, it adds false in req.user.
+```
+app.get("/users/optional", auth.userOptional, async (req, res) => {
+  res.json(req.user ? req.user : {});
+});
+```
+
+13. getUserInfo
 Get user info from access token.
 ```
 const userInfo = await auth.getUserInfo(accessToken);
