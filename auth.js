@@ -148,6 +148,33 @@ Auth.prototype.signUpAdmin = async function (user) {
   return res;
 };
 
+Auth.prototype.autoVerify = async function (user) {
+  const confirmParams = {
+    Username: user.username,
+    UserPoolId: this.poolId,
+  }
+
+  await this.cognitoIdentity.adminConfirmSignUp(confirmParams).promise();
+
+  const params = {
+    Username: user.username,
+    UserPoolId: this.poolId,
+    UserAttributes: [],
+  };
+
+  if (user.email) {
+    params.UserAttributes.push({ Name: "email_verified", Value: "true" });
+  }
+
+  if (user.phone) {
+    params.UserAttributes.push({ Name: "phone_number_verified", Value: "true" });
+  }
+
+  console.log(params);
+
+  return await this.cognitoIdentity.adminUpdateUserAttributes(params).promise();
+};
+
 Auth.prototype.signUpUser = async function (user) {
   const res = await this._signUp(user);
 

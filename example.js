@@ -53,6 +53,20 @@ app.post("/auth/signup/admin", async (req, res) => {
   }
 });
 
+app.post("/auth/signup/admin-auto-verify", async (req, res) => {
+  const user = req.body;
+
+  try {
+    await auth.signUpAdmin(user);
+    const result = await auth.autoVerify(user);
+
+    return res.json(result);
+  } catch (error) {
+    console.log(error)
+    return res.status(400).json(error);
+  }
+});
+
 app.post("/auth/confirmSignUp", async (req, res) => {
   try {
     const { username, otp } = req.body;
@@ -75,7 +89,6 @@ app.post("/auth/login", async (req, res) => {
     }
 
     return res.status(200).json(authResult);
-  
   } catch (error) {
     return res.status(400).json(error);
   }
