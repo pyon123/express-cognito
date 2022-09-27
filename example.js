@@ -35,7 +35,7 @@ app.post("/auth/signup", async (req, res) => {
   try {
     const result = await auth.signUpUser(user);
 
-    return res.status(200).json(result);
+    return res.json(result);
   } catch (error) {
     return res.status(400).json(error);
   }
@@ -47,7 +47,7 @@ app.post("/auth/signup/admin", async (req, res) => {
   try {
     const result = await auth.signUpAdmin(user);
 
-    return res.status(200).json(result);
+    return res.json(result);
   } catch (error) {
     return res.status(400).json(error);
   }
@@ -62,7 +62,6 @@ app.post("/auth/signup/admin-auto-verify", async (req, res) => {
 
     return res.json(result);
   } catch (error) {
-    console.log(error)
     return res.status(400).json(error);
   }
 });
@@ -88,7 +87,7 @@ app.post("/auth/login", async (req, res) => {
       authResult.groups = userInfo.groups;
     }
 
-    return res.status(200).json(authResult);
+    return res.json(authResult);
   } catch (error) {
     return res.status(400).json(error);
   }
@@ -153,11 +152,20 @@ app.post("/auth/refresh-token", async (req, res) => {
 });
 
 app.get("/users/all", auth.adminOnly, async (req, res) => {
-  res.status(200).send("Admin access");
+  res.send("Admin access");
 });
 
 app.get("/users/user-only", auth.userOnly, async (req, res) => {
-  res.status(200).send("User access");
+  res.send("User access");
+});
+
+app.get("/users/optional", auth.userOptional, async (req, res) => {
+  res.json(req.user ? req.user : {});
+});
+
+app.get("/users/me", auth.userOptional, async (req, res) => {
+  if (req.user) return res.send(`Hello ${req.user.username}`);
+  return res.status(401).send("Not logged in");
 });
 
 app.listen(port, "0.0.0.0", async () => {

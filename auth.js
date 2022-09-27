@@ -112,6 +112,25 @@ class Auth {
     }
   };
 
+  userOptional = async (req, res, next) => {
+    try {
+      const response = await this.auth(req);
+
+      const groups = response["cognito:groups"];
+
+      req.user = {
+        username: response.username,
+        sub: response.sub,
+        groups,
+      };
+
+      next();
+    } catch (error) {
+      req.user = false;
+      next();
+    }
+  };
+
   generateHash(username) {
     return crypto
       .createHmac("SHA256", this.clientSecret)
@@ -169,8 +188,6 @@ Auth.prototype.autoVerify = async function (user) {
   if (user.phone) {
     params.UserAttributes.push({ Name: "phone_number_verified", Value: "true" });
   }
-
-  console.log(params);
 
   return await this.cognitoIdentity.adminUpdateUserAttributes(params).promise();
 };
